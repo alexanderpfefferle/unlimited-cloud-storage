@@ -26,7 +26,7 @@ magnetic link to your server which users can use to access the file.
 When trying to access the file, the server would look up what image corresponds to the link,
 downloads the image, decodes it back and returns the original file to the user.
 
-But because I still wasn't satisfied with the performance I rewrote it again,
+But because I still wasn't satisfied with the performance I rewrote the backend again,
 this time from scratch, in go.
 
 I also implemented compression via gzip and encryption via aes256, this not only
