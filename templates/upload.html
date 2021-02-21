@@ -1,0 +1,102 @@
+<html>
+<!--
+alias cloud='function _cloud(){ curl -F "file=@$1" https://HOSTNAME/uploader;};_cloud'
+-->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<link href="https://netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<link href="https://netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<link rel="stylesheet" href="https://www.cssscript.com/demo/minimal-notification-popup-pure-javascript/notifications.css">
+<script src="https://www.cssscript.com/demo/minimal-notification-popup-pure-javascript/notifications.js"></script>
+<script src="https://netdna.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+   <body style="margin: 2%">
+         <input id="file" type = "file" name = "file" style="display: none;" onchange="upload();"/>
+           <center><h2>Cloud</h2></center>
+          <div class="upload-drop-zone" id="drop-zone" onclick="$('#file').click()">
+            Click or Drop a file here
+          </div>
+          <div class="js-upload-finished">
+            <h4>Uploaded:</h4>
+            <div class="list-group">
+            </div>
+          </div>
+   </body>
+<script>
+function copy(text) {
+    var input = document.createElement('input');
+    input.setAttribute('value', text);
+    document.body.appendChild(input);
+    input.select();
+    var result = document.execCommand('copy');
+    document.body.removeChild(input);
+    return result;
+ }
+ 
+ function upload(){
+    var formData = new FormData();
+    formData.append('file', document.getElementById("file").files[0]);
+    filename = document.getElementById("file").files[0].name
+    $.ajax({
+       url : '/uploader',
+       type : 'POST',
+       data : formData,
+       processData: false,
+       contentType: false,
+       success : function(data) {
+           copy(data)
+           if (data.indexOf('error') == -1){
+                window.createNotification({
+                    closeOnClick: true,
+                    displayCloseButton: false,
+                    positionClass: 'nfc-top-right',
+                    showDuration: 2000,
+                    theme: 'success'
+                })({
+                    title: 'Sucessfully uploaded!',
+                    message: ''
+                });
+                $(".list-group").append('<a href="'+data.replace("\n", "")+'" target="_blank" class="list-group-item list-group-item-success"><span class="badge alert-success pull-right">'+filename+'</span>'+data.replace("\n", "")+'</a>')
+           }else{
+                window.createNotification({
+                    closeOnClick: true,
+                    displayCloseButton: false,
+                    positionClass: 'nfc-top-right',
+                    showDuration: 2000,
+                    theme: 'error'
+                })({
+                    title: 'Error while uploading!',
+                    message: ''
+                });
+           }
+       }});
+    window.createNotification({
+			closeOnClick: true,
+			displayCloseButton: false,
+			positionClass: 'nfc-top-right',
+			showDuration: 2000,
+			theme: 'info'
+		})({
+			title: 'Upload started',
+			message: ''
+		});
+ }
+
+$(document).on("dragover drop", function(e) {
+    e.preventDefault();
+}).on("drop", function(e) {
+    $("input[type='file']")
+        .prop("files", e.originalEvent.dataTransfer.files);
+    upload();
+});
+</script>
+<style>
+
+/* skin.css Style*/
+.upload-drop-zone {
+  color: #ccc;
+  border-style: dashed;
+  border-color: #ccc;
+  line-height: 200px;
+  text-align: center
+}
+</style>
+</html>
