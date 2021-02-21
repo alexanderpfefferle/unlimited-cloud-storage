@@ -6,7 +6,7 @@ Its not like I need a huge amount of storage, I just did it as a proof of concep
 because I thought it was a nice project.
 
 Essentially I would take 3-byte blocks from the input file and treat these as the RGB value of a pixel.
-So if I take a quadratic image of size x I could store up to x*x*3 bytes in it.
+So if I take a quadratic image of size x I could store up to x\*x\*3 bytes in it.
 
 Some image hosters limit the size of images that can be uploaded to them, so if you want to allow for
 arbitrary file size you would have to split it up into multiple images and store a list of urls to all those images.
@@ -33,7 +33,10 @@ I also implemented compression via gzip and encryption via aes256, this not only
 increased the performance, but also made sure the image hoster couldn't analyze the data.
 
 So now the upload looks like this:
+
 upload file to server -> compress -> encrypt -> upload to image hoster
+
 And the download looks like this:
+
 download from image hoster -> decrypt -> decompress -> send to user 
 
